@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Budget from './Components/Budget';
@@ -7,6 +7,8 @@ import Landing from './Components/Landing';
 import LoginProvider from './Components/LoginProvider';
 
 function App() {
+const [isLoggedIn, setIsLoggedIn]=useState('false');
+
   return (
     <LoginProvider>
 
@@ -19,7 +21,7 @@ function App() {
             <Router>
               <Routes>
               <Route path='/employees' element={<Budget/> }/>
-                <Route path='/' element={<Landing/> }/>
+                <Route path='/' element={<Landing/>} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
                 <Route path='/reimbursements' element={ <Reimbursements/> }/>
                
               </Routes>

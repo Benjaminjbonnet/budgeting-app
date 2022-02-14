@@ -5,7 +5,7 @@ import {Link,useNavigate} from 'react-router-dom'
 
 
 
-function Landing() {
+function Landing(isLoggedIn,setIsLoggedIn) {
   const [employee,setEmployee] = useState([]);
     const [loginValues, setLoginValues]= useState({
       username:'',
@@ -23,12 +23,14 @@ function login(){
   }).then(response =>{
     setEmployee(response.data);
     verifyUser(response.data);
+    
   })
   
 
  function verifyUser(response){
    for(let i =0;i<response.length;i++){
        if (response[i].password == loginValues.passowrd){
+         setIsLoggedIn('true')
         navigate('/employees');
        } 
    }
