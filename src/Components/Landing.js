@@ -29,7 +29,7 @@ function login(){
 
  function verifyUser(response){
    for(let i =0;i<response.length;i++){
-       if (response[i].password == loginValues.passowrd){
+       if (response[i].password === loginValues.passowrd){
          setIsLoggedIn('true')
         navigate('/employees');
        } 

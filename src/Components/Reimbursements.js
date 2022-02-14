@@ -46,7 +46,7 @@ function submitTicket(){
     type: ticketValues.type,
     resolvetime: "2:33"
   } )
-  .then(response)
+  .then(response => console.log(response))
   .catch(err => console.log(err))
 
 }
