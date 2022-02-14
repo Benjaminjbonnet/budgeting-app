@@ -8,7 +8,9 @@ import LoginProvider from './Components/LoginProvider';
 
 function App() {
 const [isLoggedIn, setIsLoggedIn]=useState('false');
+const determinIftheUserIsLoggedIn = ()=>{
 
+}
   return (
     <LoginProvider>
 
