@@ -4,7 +4,10 @@ import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
 import "./styles.css";
 import {useEffect,useState} from 'react';
-function Reimbursements() {
+import ReadOnlyRow from './ReadOnlyRow';
+import EditableRow from './EditableRow';
+function Reimbursements(isLoggedIn,logout) {
+  const [editContactId,setEditContactId] = useState(null);
   const [ticketValues,setTicketValues] = useState([{
     amount:"",
     description:"",
@@ -12,7 +15,8 @@ function Reimbursements() {
   }
 
   ])
-
+  let date = Date()
+ 
   const handleAddFormChange=(event) =>{
             event.preventDefault();
 
@@ -25,6 +29,7 @@ function Reimbursements() {
             setTicketValues(newFormData);
   }
 const [reimbursements,setReimbursements] = useState([]);
+if(isLoggedIn){
 useEffect(()=>{
 axios.get('http://3.93.170.1:7070/reimbursements')
 .then((response)=>{
@@ -32,8 +37,10 @@ axios.get('http://3.93.170.1:7070/reimbursements')
 })
 .catch((err)=>console.log(err))
 },[]);
-  let date = Date.now
-  console.log(date);
+} else if(!isLoggedIn){
+  navigate('/');
+}
+
 function submitTicket(){
 
 
@@ -44,12 +51,59 @@ function submitTicket(){
     amount: ticketValues.amount,
     description: ticketValues.description,
     type: ticketValues.type,
-    resolvetime: "2:33"
+    resolvetime: date
   } )
   .then(response => console.log(response))
   .catch(err => console.log(err))
-
+  window.location.reload(true);
 }
+const [editFormData, setEditFormData] =useState({
+  reimbursementId:"",
+  status:"",
+  amount:"",
+  description:"",
+  type:"",
+  resolvetime:""
+});
+const handleEditFormChange = (event) =>{
+  event.preventDefault();
+  const fieldName = event.target.getAttribute("name");
+  const fieldValue = event.target.value;
+
+  const newFormData = {...editFormData};
+  newFormData[fieldName] = fieldValue;
+  setEditFormData(newFormData);
+}
+const handleEditFormSubmit= (event,reimbursementId) =>{
+ event.preventDefault();
+  axios.put("http://3.93.170.1:7070/update",{
+    ...editFormData,
+    reimbursementId:reimbursementId,
+    status:editFormData.status,
+    amount:editFormData.amount,
+    description:editFormData.description,
+    type:editFormData.type,
+    resolvetime:date
+    
+  }).then(response=> console.log(response))
+  .catch(err => console.log(err))
+  window.location.reload(true);
+}
+const handleEditClick=(event, reimbursementId,status,amount,type,description,resolvetime)=>{
+  event.preventDefault();
+  setEditContactId(reimbursementId)
+
+  const formValues = {
+    
+    status:status,
+    amount: amount,
+    description:description,
+    type:type,
+    resolvetime:resolvetime
+  }
+    setEditFormData(formValues);
+  }
+
 
   return (
 <>
@@ -68,7 +122,7 @@ function submitTicket(){
   <Link className='navicon' to="/reimbursements"> Tickets</Link>
 
 <Link className='navicon' to="/employees">Employees</Link>
-
+<Link className='logout' to="/" onClick={logout}>logout</Link>
         </div>
     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="true" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
@@ -76,57 +130,78 @@ function submitTicket(){
   </nav>
 
 </div>
-<Link className='logout' to="/">logout</Link>
-<form onSubmit={submitTicket}>
-    <input
+
+<section className="form">
+<form  onSubmit={submitTicket} className="container py-5 h-100">
+  <div className="">
+  <div className='form-group'>
+    <input className="form-control" id="exampleFormControlTextarea1"
+        type="text"
+        name="status"
+        required="required"
+        placeholder='status'
+        onChange={handleAddFormChange}
+        
+    /> </div>
+  <div className='form-group'>
+    <input className="form-control" id="exampleFormControlTextarea1"
         type="text"
         name="amount"
         required="required"
         placeholder='Amount'
         onChange={handleAddFormChange}
         
-    />
-        <input
+    /> </div>
+    <div className='form-group'>
+        <input className="form-control" id="exampleFormControlTextarea1"
         type="text"
         name="type"
         required="required"
         placeholder='type'
         onChange={handleAddFormChange}
         
-    />
-        <input
+    /> </div>
+    <div className='form-group'>
+        <input className="form-control" id="exampleFormControlTextarea1" rows="4"
         type="text"
         name="description"
         placeholder='description'
         onChange={handleAddFormChange}
         
-    />
+    /></div>
      
-    <button>Submit</button>
+    <button className='btn btn-primary btn-block' >Submit</button>
+   </div>
   </form>
+  </section>
 <div className="column">
 
- <table className="table">
+ <table className="table table-striped">
  <thead className="thead-dark">
    <tr>
      <th >ID</th>
-     <th >TYPE</th>
+     <th>STATUS</th>
      <th >AMOUNT</th>
      <th >DESCRIPTION</th>
+     
+     <th>TIME</th>
    </tr>
  </thead>
  <tbody> 
-      {reimbursements.map(({reimbursementId,amount,description,type,resolvetime})=>(
-   <tr>
-      <td>{reimbursementId}</td>
-      <td>{amount}</td>
-      <td>{description}</td>
-      <td>{type}</td>
-      <td>{resolvetime}</td>
-      <td><button >Edit</button></td>
-      <td><button >Delete</button></td>
-   </tr>
+      {reimbursements.map(({reimbursementId,status,amount,description,type,resolvetime})=>(
+          <>
+          {editContactId === reimbursementId   ? ( 
+          <EditableRow editFormData={editFormData} handleEditFormSubmit={handleEditFormSubmit} handleEditFormChange={handleEditFormChange} reimbursementId={reimbursementId} />
+          ) : (
+              <ReadOnlyRow reimbursementId={reimbursementId} status={status} amount={amount} description={description}
+          type={type} resolvetime={resolvetime} handleEditClick={handleEditClick} />
+          )}
+         
+          
+      
 
+          </>
+         
   ))}
  
    </tbody> 

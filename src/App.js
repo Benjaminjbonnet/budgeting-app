@@ -7,9 +7,14 @@ import Landing from './Components/Landing';
 import LoginProvider from './Components/LoginProvider';
 
 function App() {
-const [isLoggedIn, setIsLoggedIn]=useState('false');
-const determinIftheUserIsLoggedIn = ()=>{
+const [isLoggedIn, setIsLoggedIn]=useState(false);
 
+function determinIftheUserIsLoggedIn (){
+
+setIsLoggedIn(true)
+}
+function logout(){
+  setIsLoggedIn(false)
 }
   return (
     <LoginProvider>
@@ -22,9 +27,9 @@ const determinIftheUserIsLoggedIn = ()=>{
           <div className='col-sm'>
             <Router>
               <Routes>
-              <Route path='/employees' element={<Budget/> }/>
-                <Route path='/' element={<Landing/>} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
-                <Route path='/reimbursements' element={ <Reimbursements/> }/>
+              <Route path='/employees' element={<Budget/> }  isLoggedIn={isLoggedIn}/>
+                <Route path='/' element={<Landing/>}  determinIftheUserIsLoggedIn={ determinIftheUserIsLoggedIn} />
+                <Route path='/reimbursements' element={ <Reimbursements/> } logout={logout} isLoggedIn={isLoggedIn}/>
                
               </Routes>
             </Router>

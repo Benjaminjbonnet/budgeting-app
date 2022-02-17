@@ -5,7 +5,7 @@ import {Link,useNavigate} from 'react-router-dom'
 
 
 
-function Landing(isLoggedIn,setIsLoggedIn) {
+function Landing( determinIftheUserIsLoggedIn) {
   const [employee,setEmployee] = useState([]);
     const [loginValues, setLoginValues]= useState({
       username:'',
@@ -21,7 +21,7 @@ function login(){
     username: loginValues.username,
     password: loginValues.passowrd
   }).then(response =>{
-    setEmployee(response.data);
+
     verifyUser(response.data);
     
   })
@@ -30,7 +30,7 @@ function login(){
  function verifyUser(response){
    for(let i =0;i<response.length;i++){
        if (response[i].password === loginValues.passowrd){
-         setIsLoggedIn('true')
+        determinIftheUserIsLoggedIn
         navigate('/employees');
        } 
    }
@@ -110,8 +110,39 @@ function login(){
       </div>
     </div>
   </div>
+
 </section>
+<footer className="text-center text-black" >
+
+<div className="container p-4">
+
+  <section className="">
+    <div className="row d-flex justify-content-center">
+      <div className="col-lg-6">
+        <div className="ratio ratio-16x9">
+          <iframe
+            className="shadow-1-strong rounded"
+            src="https://www.youtube.com/embed/vlDzYIIOYmM"
+            title="YouTube video"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
     </div>
+  </section>
+
+</div>
+
+
+
+<div className="text-center p-3" >
+  © 2020 Copyright:
+  <a className="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+</div>
+
+</footer>
+    </div>
+    
   )
 }
 
