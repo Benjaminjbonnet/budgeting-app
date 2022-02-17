@@ -29,7 +29,7 @@ function Reimbursements(isLoggedIn,logout) {
             setTicketValues(newFormData);
   }
 const [reimbursements,setReimbursements] = useState([]);
-if(isLoggedIn){
+
 useEffect(()=>{
 axios.get('http://3.93.170.1:7070/reimbursements')
 .then((response)=>{
@@ -37,9 +37,7 @@ axios.get('http://3.93.170.1:7070/reimbursements')
 })
 .catch((err)=>console.log(err))
 },[]);
-} else if(!isLoggedIn){
-  navigate('/');
-}
+ 
 
 function submitTicket(){
 
