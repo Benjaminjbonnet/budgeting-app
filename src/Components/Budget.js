@@ -28,7 +28,7 @@ function Budget () {
       {/* Navbar buttons and links */}
   <div className="topbarLinks">
   <Link className='navicon' to="/reimbursements"> Tickets</Link>
-
+<Link className='navicon' to="/">logout</Link>
  <Link className='navicon' to="/">Home</Link>
 
         </div>
@@ -38,7 +38,7 @@ function Budget () {
   </nav>
 
 </div>
-<Link className='btn btn-outline-primary' to="/">logout</Link>
+
           <div className="column">
             {employees.map(({index,name,email,picture,location }) => (
               <div className="post" key={index}>

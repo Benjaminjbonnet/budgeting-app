@@ -120,7 +120,7 @@ const handleEditClick=(event, reimbursementId,status,amount,type,description,res
   <Link className='navicon' to="/reimbursements"> Tickets</Link>
 
 <Link className='navicon' to="/employees">Employees</Link>
-<Link className='logout' to="/" onClick={logout}>logout</Link>
+<Link className='navicon' to="/" onClick={logout}>logout</Link>
         </div>
     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="true" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
